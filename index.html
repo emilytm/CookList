@@ -3,9 +3,32 @@
 
 <head>
     <link rel="stylesheet" href="/index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
 <body>
-
+    <div class="app-area">
+        <header>
+            <div class="header-text-wrapper">
+                <h1>Find something to cook</h1>
+                <h4>My Recipes</h4>
+            </div>
+            <div class="search-wrapper">
+                <input class="search-box" name="search-box" id="search-box" placeholder="Search for a recipe">
+                <button class="search-button" name="search-button" id="search-button">Search</button>
+            </div>
+        </header>
+        <main>
+            <section class="results-area">
+                <div class="results-list">
+                    <!--Results go here-->
+                </div>
+                <div class="message-display">
+                    <img src="/cooking-icon.png" alt="bowl of steaming food icon" class="msg-icon">
+                    <p class="empty-state-message">Start exploring</p>
+                </div>
+            </section>
+        </main>
+    </div>
 
 <script type="module" src="/index.js"></script>
 </body>

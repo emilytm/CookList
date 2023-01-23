@@ -1,6 +1,138 @@
-body, main {
-    padding: 0;
-    margin: 0;
-    background-color: aqua;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+:root {
+    --black: #374151;
+    --light-gray: #E5E7EB;
+    --dark-gray: #D9d9d9; 
+    --yellow: #FEC654;
+    --blue: #0D0D4B;
 }
 
+body, .app-area {
+    padding: 0;
+    margin: 0;
+    background-color: #1C1C1C;
+    font-family: 'Inter',Arial, Helvetica, sans-serif;
+}
+
+.app-area {
+    max-width: 700px;
+    margin: 2em auto 0 auto;
+    border: 2px solid var(--blue);
+}
+header {
+    background-image: 
+        linear-gradient(357deg, rgba(15,13,52,0.8281906512605042) 0%, rgba(8,8,98,0.7189469537815126) 44%, rgba(10, 10, 87, 0.224) 100%),
+        url('hero-bg.jpg');
+    background-size: cover;
+    background-position: bottom center;
+    min-height: 10em;
+    padding-left: 2em;
+    padding-right: 2em;
+    background-color:blueviolet;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 1fr min-content;
+    grid-template: 
+        "textwrap"
+        "search"
+    ;
+    position: relative;
+}
+
+.header-text-wrapper {
+    grid-area: textwrap;
+    margin-top: 3em;
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+    grid-template-areas: "title myList";
+    
+}
+
+header h1 {
+    grid-area: title;
+    color: #FFFFFF;
+    align-self: center;
+}
+
+header h4 {
+    grid-area: myList;
+    justify-self: end;
+    align-self: center;
+    color: #FFFFFF;
+}
+
+.search-wrapper {
+    position: absolute;
+    width: 100%;
+    grid-area: search;
+    max-height: 3em;
+    display: grid;
+    grid-template-columns: 3fr minmax(min-content, 1fr);
+
+}
+.search-box {
+    border: 1px solid #D1D5DB;
+}
+.search-button {
+    border: 1px solid #D1D5DB;
+    border-left: none;
+    border-radius: 0 .375em .375em 0;
+}
+
+.results-area {
+    min-height: 50vh;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.message-display {
+    text-align: center;
+}
+.message-display p {
+    font-weight: bold;
+    color: var(--dark-gray)
+}
+.message-display img {
+    max-width: 3em;
+    padding-bottom: 1em;
+}
+
+/* ----- Media Query for Mobile UI ----- */
+
+@media (max-width: 499px) {
+    header {
+        min-height: 5em;
+    }
+    .header-text-wrapper {
+        grid-template-rows: 1fr 1fr;
+        grid-template-columns: 1fr;
+        grid-template-areas: "myList" "title";
+        margin-top: 1em;
+        max-height: min-content;
+    }
+    h1 {
+        font-size: 1.5em;
+    }
+
+}
+
+/* -- TYPOGRAPHY -- */
+h1, h4 {
+    letter-spacing: -.0625em;
+}
+
+input {
+    font-family: 'Inter',Arial, Helvetica, sans-serif;
+    padding: .75em;
+    border-radius: .375em 0 0 .375em;
+}
+
+button {
+    font-family: 'Inter',Arial, Helvetica, sans-serif;
+}
+
+.results-area p {
+    margin-top: 0;
+}
