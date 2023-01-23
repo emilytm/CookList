@@ -140,3 +140,8 @@ button {
 .results-area p {
     margin-top: 0;
 }
+
+/* -- UTILITIES -- */
+.hidden {
+    display: none;
+}
