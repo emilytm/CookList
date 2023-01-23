@@ -1,4 +1,17 @@
-console.log('whatup')
+
+document.addEventListener('DOMContentLoaded',(e) => {
+    console.log(e)
+})
+
+let searchArea = document.getElementById('search-wrapper')
+
+searchArea.addEventListener('submit', async function(e){
+    e.preventDefault()
+    let searchTerm = searchArea.elements[0].value
+    console.log(await parseResults(searchTerm))
+})
+
+
 
 
 console.log(await parseResults('Tahini'))
@@ -7,7 +20,7 @@ async function search(searchString){
 
     let getResults = await fetchJson(`https://api.edamam.com/api/recipes/v2?type=any&beta=true&q=${searchString}&app_id=08159f45&app_key=%207cde058d95c392d413b4017227de3d3a`)
     return getResults.hits
-    
+
 }
 
 async function parseResults(searchTerm){
