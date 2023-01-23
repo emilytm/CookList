@@ -58,25 +58,24 @@ async function fetchJson(url){
 }
 
 function renderResults(searchResults) {
+    console.log(searchResults)
     let resultsHtml = ""
     for ( let recipe of searchResults ) {
         let imageLink = recipe.image
         let ingredients = []
-        console.log(recipe.ingredients)
         recipe.ingredients.forEach(food => {
             ingredients.push(food.text)
         });
-        console.log(ingredients)
         let ingredientString = ingredients.join(", ")
         resultsHtml += `
         <div class="result-item" data-recipe="${recipe.uniqueUri}">
             <img class="result-img" alt="recipe image for Tahini Shortbread Cookies" src="${imageLink}">
-            <p class="title">${recipe.label}</p>
+            <p class="title first-row left-align">${recipe.name}</p>
             <p class="add-to-list-btn">My Recipes</p>
-            <p class="source">${recipe.source}</p>
-            <p class="tags">${recipe.mealType}, ${recipe.dishType}</p>
-            <p class="cuisine">${recipe.cuisine}</p>
-            <p class="ingredient-preview">${ingredientString}</p>
+            <p class="source left-align"><a href="${recipe.link}">${recipe.source}</a></p>
+            <p class="tags left-align">${recipe.mealType}, ${recipe.dishType}</p>
+            <p class="cuisine right-align">${recipe.cuisine}</p>
+            <p class="ingredient-preview left-align end-in-ellipse">${ingredientString}</p>
         </div>        
         `
     }

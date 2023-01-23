@@ -98,6 +98,101 @@ header h4 {
     max-width: 3em;
     padding-bottom: 1em;
 }
+.results-area {
+    padding-top: 2em;
+}
+.result-item {
+    border: 1px solid red;
+    padding: 1em;
+    margin: 1em;
+    height: min-content;
+    display: grid;
+    grid-template-columns: 12em 1fr 8em;
+    grid-template-rows: 1.25fr 1fr 1fr 2fr;
+    grid-template-areas: 
+        "  pic  title     title   "
+        "  pic  source   add-btn  "
+        "  pic  tags     cuisine  "
+        "  pic  ing        ing    "
+    ;
+    row-gap: 1.5em;
+    column-gap: 1em;
+    align-items: baseline;
+}
+.result-item * {
+    margin-block-end: 0;
+}
+
+
+.result-img {
+    grid-area: pic;
+    height: 12em;
+}
+
+
+.title {
+    grid-area: title;
+    justify-self: start;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.add-to-list-btn {
+    grid-area: add-btn;
+    justify-self: end;
+    text-align: right;
+}
+.source {
+    grid-area: source;
+}
+.tags {
+    grid-area: tags
+}
+.cuisine {
+    grid-area: cuisine;
+}
+.ingredient-preview {
+    grid-area: ing;
+}
+
+
+/*
+        <div class="result-item" data-recipe="${recipe.uniqueUri}">
+            <img class="result-img" alt="recipe image for Tahini Shortbread Cookies" src="${imageLink}">
+            <p class="title">${recipe.label}</p>
+            <p class="add-to-list-btn">My Recipes</p>
+            <p class="source">${recipe.source}</p>
+            <p class="tags">${recipe.mealType}, ${recipe.dishType}</p>
+            <p class="cuisine">${recipe.cuisine}</p>
+            <p class="ingredient-preview">${ingredientString}</p>
+        </div>       
+
+*/
+
+@media (max-width: 768px) {
+    .result-item {
+        grid-template-columns: 3fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+        grid-template-areas: 
+            "   title    pic   "
+            "  add-btn   pic   "
+            " source cuisine"
+            "  tags    tags  "
+            "  ing     ing   "
+        ;
+        row-gap: 0em;
+        column-gap: 1em;
+    }
+    .result-img {
+        max-width: 8em;
+        max-height: 8em;
+        object-fit: cover;
+    }
+    .add-to-list-btn {
+        text-align: left;
+        justify-self: start;
+    }
+}
 
 /* ----- Media Query for Mobile UI ----- */
 
@@ -144,4 +239,28 @@ button {
 /* -- UTILITIES -- */
 .hidden {
     display: none;
+}
+
+.first-row {
+    font-weight: bold;
+    align-self: flex-end;
+    font-size: large;
+}
+.left-align {
+    justify-self: start;
+    text-align: left;
+}
+
+.right-align {
+    justify-self: end;
+    text-align: right;
+}
+
+.end-in-ellipse {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; 
+            line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
