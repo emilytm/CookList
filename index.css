@@ -11,6 +11,7 @@ body, .app-area {
     padding: 0;
     margin: 0;
     background-color: #1C1C1C;
+    color: var(--blue);
     font-family: 'Inter',Arial, Helvetica, sans-serif;
 }
 
@@ -250,6 +251,15 @@ button {
 
 .results-area p {
     margin-top: 0;
+}
+
+a {
+    color: rgb(0, 128, 66);
+    text-decoration: none;
+}
+
+a:hover{
+    text-decoration: underline;
 }
 
 /* -- UTILITIES -- */
