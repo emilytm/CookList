@@ -114,6 +114,10 @@ header h4 {
     }
     h1 {
         font-size: 1.5em;
+        padding-bottom: 1em;
+    }
+    .search-wrapper {
+        top: -1em;
     }
 
 }
