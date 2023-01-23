@@ -136,11 +136,15 @@ header h4 {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    align-self: flex-end;
+
 }
 .add-to-list-btn {
     grid-area: add-btn;
     justify-self: end;
     text-align: right;
+    align-self: flex-end;
+
 }
 .source {
     grid-area: source;
@@ -150,6 +154,8 @@ header h4 {
 }
 .cuisine {
     grid-area: cuisine;
+    justify-self: end;
+    text-align: right;
 }
 .ingredient-preview {
     grid-area: ing;
@@ -172,25 +178,35 @@ header h4 {
 @media (max-width: 768px) {
     .result-item {
         grid-template-columns: 3fr 1fr;
-        grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
         grid-template-areas: 
             "   title    pic   "
             "  add-btn   pic   "
-            " source cuisine"
+            "  source    pic   "
+            "  cuisine    pic "
             "  tags    tags  "
             "  ing     ing   "
         ;
-        row-gap: 0em;
+        row-gap: .5em;
         column-gap: 1em;
+        align-items: center;
     }
     .result-img {
-        max-width: 8em;
-        max-height: 8em;
+        max-width: 10em;
+        max-height: 10em;
         object-fit: cover;
     }
     .add-to-list-btn {
         text-align: left;
         justify-self: start;
+        align-self: center;
+    }
+    .cuisine {
+        text-align: left;
+        justify-self: start;
+    }
+    .title {
+        align-self: center;
     }
 }
 
@@ -243,17 +259,11 @@ button {
 
 .first-row {
     font-weight: bold;
-    align-self: flex-end;
     font-size: large;
 }
 .left-align {
     justify-self: start;
     text-align: left;
-}
-
-.right-align {
-    justify-self: end;
-    text-align: right;
 }
 
 .end-in-ellipse {

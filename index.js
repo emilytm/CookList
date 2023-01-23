@@ -74,7 +74,7 @@ function renderResults(searchResults) {
             <p class="add-to-list-btn">My Recipes</p>
             <p class="source left-align"><a href="${recipe.link}">${recipe.source}</a></p>
             <p class="tags left-align">${recipe.mealType}, ${recipe.dishType}</p>
-            <p class="cuisine right-align">${recipe.cuisine}</p>
+            <p class="cuisine">${recipe.cuisine}</p>
             <p class="ingredient-preview left-align end-in-ellipse">${ingredientString}</p>
         </div>        
         `
