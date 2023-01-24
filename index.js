@@ -1,20 +1,34 @@
 
-document.addEventListener('DOMContentLoaded',(e) => {
-    console.log(e.target)
-    //if(e.target.dataset.toggle){
-    //    console.log('add or remove')
-    //}
-})
 
 let searchArea = document.getElementById('search-wrapper')
+let recipeList = []
 
 searchArea.addEventListener('submit', async function(e){
     e.preventDefault()
     let searchTerm = searchArea.elements[0].value
     document.getElementById('message-display').classList.add('hidden')
     let results = await parseResults(searchTerm)
-    results = formatResults(results)
-    renderResults(results)
+    recipeList = formatResults(results)
+    renderResults(recipeList)
+})
+
+document.addEventListener('click',function(e) {
+    if(e.target.dataset.recipe){
+        let clickedRecipe = recipeList.find(result => result.uniqueUri === e.target.dataset.recipe)
+        if( clickedRecipe.saved ){
+            clickedRecipe.saved = false
+            let pToChange = document.querySelector(`p[data-recipe="${clickedRecipe.uniqueUri}"]`)
+            let imgToChange = document.querySelector(`img[data-recipe="${clickedRecipe.uniqueUri}"]`)
+            pToChange.textContent = 'My Recipes'
+            imgToChange.setAttribute('src','/add.svg')      
+        } else if ( !clickedRecipe.saved){
+            clickedRecipe.saved = true
+            let pToChange = document.querySelector(`p[data-recipe="${clickedRecipe.uniqueUri}"]`)
+            let imgToChange = document.querySelector(`img[data-recipe="${clickedRecipe.uniqueUri}"]`)
+            pToChange.textContent = 'Remove'
+            imgToChange.setAttribute('src','/remove.svg')   
+        }
+    }
 })
 
 async function search(searchString){
@@ -45,7 +59,8 @@ async function parseResults(searchTerm){
             yield: hit.recipe.yield,
             time: hit.recipe.totalTime,
             cautions: hit.recipe.cautions,
-            uniqueUri: hit.recipe.shareAs
+            uniqueUri: hit.recipe.shareAs,
+            saved: false
         })
     }
     return recipeResults
@@ -69,12 +84,12 @@ function renderResults(searchResults) {
         });
         let ingredientString = ingredients.join(", ")
         resultsHtml += `
-        <div class="result-item" data-recipe="${recipe.uniqueUri}">
+        <div class="result-item">
             <img class="result-img" alt="recipe image for Tahini Shortbread Cookies" src="${imageLink}">
             <p class="title first-row left-align">${recipe.name}</p>
-            <div class='list-toggle-btn' id='list-toggle-btn' data-toggle="my-recipes">
-                <img class='list-toggle-icon' id='list-toggle-icon' src="/add.svg" alt="add/remove icon" data-toggle="my-recipes">
-                <p class="list-toggle-text" data-toggle="my-recipes">My Recipes</p>
+            <div class='list-toggle-btn' id='list-toggle-btn' data-recipe="${recipe.uniqueUri}">
+                <img class='list-toggle-icon' id='list-toggle-icon' src="/add.svg" alt="add/remove icon" data-recipe="${recipe.uniqueUri}">
+                <p class="list-toggle-text" id="list-toggle-text" data-recipe="${recipe.uniqueUri}">My Recipes</p>
             </div>
             <p class="source left-align"><a href="${recipe.link}">${recipe.source}</a></p>
             <p class="tags left-align">${recipe.mealType}, ${recipe.dishType}</p>
