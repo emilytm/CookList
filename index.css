@@ -10,7 +10,7 @@
 body, .app-area {
     padding: 0;
     margin: 0;
-    background-color: #1C1C1C;
+    background-color: var(--black);
     color: var(--blue);
     font-family: 'Inter',Arial, Helvetica, sans-serif;
 }
@@ -19,6 +19,7 @@ body, .app-area {
     max-width: 700px;
     margin: 2em auto 0 auto;
     border: 2px solid var(--blue);
+    border-radius: .25em;
 }
 header {
     background-image: 
@@ -49,10 +50,18 @@ header {
     
 }
 
-header h1 {
+h1 {
     grid-area: title;
     color: #FFFFFF;
     align-self: center;
+    cursor: pointer;
+}
+
+h1:hover {
+    text-decoration: underline;
+}
+h1:active {
+    color:var(--yellow);
 }
 
 header h4 {
@@ -60,6 +69,14 @@ header h4 {
     justify-self: end;
     align-self: center;
     color: #FFFFFF;
+    cursor: pointer;
+}
+header h4:hover {
+    text-decoration: underline;
+}
+
+header h4:active {
+    color:var(--yellow);
 }
 
 .search-wrapper {
