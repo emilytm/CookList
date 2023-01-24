@@ -1,6 +1,9 @@
 
 document.addEventListener('DOMContentLoaded',(e) => {
-    console.log(e)
+    console.log(e.target)
+    //if(e.target.dataset.toggle){
+    //    console.log('add or remove')
+    //}
 })
 
 let searchArea = document.getElementById('search-wrapper')
@@ -9,13 +12,14 @@ searchArea.addEventListener('submit', async function(e){
     e.preventDefault()
     let searchTerm = searchArea.elements[0].value
     document.getElementById('message-display').classList.add('hidden')
-    renderResults(await parseResults(searchTerm))
+    let results = await parseResults(searchTerm)
+    results = formatResults(results)
+    renderResults(results)
 })
 
 async function search(searchString){
 
     let getResults = await fetchJson(`https://api.edamam.com/api/recipes/v2?type=any&beta=true&q=${searchString}&app_id=08159f45&app_key=%207cde058d95c392d413b4017227de3d3a`)
-    console.log(getResults)
     return getResults.hits
 
 }
@@ -38,14 +42,12 @@ async function parseResults(searchTerm){
             healthLabels: hit.recipe.healthLabels,
             image: hit.recipe.image,
             images: hit.recipe.images,
-            ingredients: hit.recipe.ingredients,
             yield: hit.recipe.yield,
             time: hit.recipe.totalTime,
             cautions: hit.recipe.cautions,
             uniqueUri: hit.recipe.shareAs
         })
     }
-
     return recipeResults
 
 }
@@ -58,7 +60,6 @@ async function fetchJson(url){
 }
 
 function renderResults(searchResults) {
-    console.log(searchResults)
     let resultsHtml = ""
     for ( let recipe of searchResults ) {
         let imageLink = recipe.image
@@ -71,7 +72,10 @@ function renderResults(searchResults) {
         <div class="result-item" data-recipe="${recipe.uniqueUri}">
             <img class="result-img" alt="recipe image for Tahini Shortbread Cookies" src="${imageLink}">
             <p class="title first-row left-align">${recipe.name}</p>
-            <p class="add-to-list-btn">My Recipes</p>
+            <div class='list-toggle-btn' id='list-toggle-btn' data-toggle="my-recipes">
+                <img class='list-toggle-icon' id='list-toggle-icon' src="/add.svg" alt="add/remove icon" data-toggle="my-recipes">
+                <p class="list-toggle-text" data-toggle="my-recipes">My Recipes</p>
+            </div>
             <p class="source left-align"><a href="${recipe.link}">${recipe.source}</a></p>
             <p class="tags left-align">${recipe.mealType}, ${recipe.dishType}</p>
             <p class="cuisine">${recipe.cuisine}</p>
@@ -82,14 +86,18 @@ function renderResults(searchResults) {
     document.getElementById('results-list').innerHTML = resultsHtml
 }
 
-/*
-                    <div class="result-item">
-                        <img class="result-img" alt="recipe image for Tahini Shortbread Cookies" src="">
-                        <p class="title">Tahini Shortbread Cookies</p>
-                        <p class="add-to-list-btn">My Recipes</p>
-                        <p class="source">Food52</p>
-                        <p class="tags">Entree</p>
-                        <p class="cuisine">French</p>
-                        <p class="ingredient-preview">Blah blah and blah bsdlkfj asdfj eioru alskdj lak alksjd ei dal</p>
-                    </div>
-                    */
+function formatResults(recipeResults){
+    recipeResults.forEach(recipe => {
+        recipe.name = titleCase(recipe.name)
+        recipe.source = titleCase(recipe.source)
+        recipe.mealType = recipe.mealType.map(type => titleCase(type))
+        recipe.cuisine = recipe.cuisine.map(cuisine => titleCase(cuisine))
+        recipe.dishType = recipe.dishType.map( item => titleCase(item) )
+    })
+
+    return recipeResults
+}
+
+function titleCase(string) {
+    return string.slice(0,1).toUpperCase() + string.slice(1)
+}

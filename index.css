@@ -103,8 +103,8 @@ header h4 {
     padding-top: 2em;
 }
 .result-item {
-    border: 1px solid red;
-    padding: 1em;
+    border-bottom: 1px solid var(--dark-gray);
+    padding: 1em 1em 2em 1em;
     margin: 1em;
     height: min-content;
     display: grid;
@@ -119,6 +119,7 @@ header h4 {
     row-gap: 1.5em;
     column-gap: 1em;
     align-items: baseline;
+    overflow: hidden;
 }
 .result-item * {
     margin-block-end: 0;
@@ -136,22 +137,43 @@ header h4 {
     justify-self: start;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
     align-self: flex-end;
-
 }
-.add-to-list-btn {
+.list-toggle-btn {
     grid-area: add-btn;
     justify-self: end;
     text-align: right;
     align-self: flex-end;
-
+    padding: .25em;
+    cursor: pointer;
 }
+
+.list-toggle-btn:hover {
+    background-color: var(--light-gray);
+    border-radius: .25em;
+}
+.list-toggle-btn:active {
+    background-color: var(--dark-gray);
+}
+
+.list-toggle-icon{
+    object-fit: contain;
+    width: .8em;
+    height: .8em;
+    padding-right: .25em;
+    display: inline;
+}
+.list-toggle-text{
+    display: inline
+}
+
 .source {
     grid-area: source;
+    overflow: ellipses;
 }
 .tags {
-    grid-area: tags
+    grid-area: tags;
+    overflow: ellipses;
 }
 .cuisine {
     grid-area: cuisine;
@@ -197,7 +219,7 @@ header h4 {
         max-height: 10em;
         object-fit: cover;
     }
-    .add-to-list-btn {
+    .list-toggle-btn {
         text-align: left;
         justify-self: start;
         align-self: center;
