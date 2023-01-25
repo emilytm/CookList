@@ -21,6 +21,7 @@ body, .app-area {
     border: 2px solid var(--blue);
     border-radius: .25em;
 }
+
 header {
     background-image: 
         linear-gradient(357deg, rgba(15,13,52,0.8281906512605042) 0%, rgba(8,8,98,0.7189469537815126) 44%, rgba(10, 10, 87, 0.224) 100%),
@@ -52,15 +53,19 @@ header {
 
 h1 {
     grid-area: title;
-    color: #FFFFFF;
     align-self: center;
     cursor: pointer;
 }
+header a {
+    text-decoration: underline;
+    color: #FFFFFF;
+}
 
-h1:hover {
+header a:hover {
     text-decoration: underline;
 }
-h1:active {
+
+header a:active {
     color:var(--yellow);
 }
 
@@ -68,15 +73,7 @@ header h4 {
     grid-area: myList;
     justify-self: end;
     align-self: center;
-    color: #FFFFFF;
     cursor: pointer;
-}
-header h4:hover {
-    text-decoration: underline;
-}
-
-header h4:active {
-    color:var(--yellow);
 }
 
 .search-wrapper {
@@ -292,7 +289,7 @@ button {
     margin-top: 0;
 }
 
-a {
+.results-area a {
     color: rgb(0, 128, 66);
     text-decoration: none;
 }
