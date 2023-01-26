@@ -62,11 +62,11 @@ header a {
 }
 
 header a:hover {
-    text-decoration: underline;
+    color: var(--yellow);
 }
 
 header a:active {
-    color:var(--yellow);
+    color:var(--light-gray);
 }
 
 header h4 {
@@ -74,6 +74,22 @@ header h4 {
     justify-self: end;
     align-self: center;
     cursor: pointer;
+}
+
+.add-recipes-cta {
+    padding: 1em;
+    background-color: var(--yellow);
+    color: var(--blue) !important;
+    border-radius: .5em;
+    cursor: pointer;
+}
+
+.add-recipes-cta:hover {
+    box-shadow: 4px 4px 4px 4px var(--light-gray);
+}
+
+.active-page {
+    text-decoration: underline var(--yellow);
 }
 
 .search-wrapper {
@@ -107,7 +123,7 @@ header h4 {
 }
 .message-display p {
     font-weight: bold;
-    color: var(--dark-gray)
+    color: var(--dark-gray);
 }
 .message-display img {
     max-width: 3em;
