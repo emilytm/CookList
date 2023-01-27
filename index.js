@@ -1,4 +1,3 @@
-//import { parseResults, searchAll, searchMyRecipes, formatResults, renderResults, search, fetchJson, sentenceCase, toggleSave } from './utils.js';
 let searchArea = document.getElementById('search-wrapper')
 
 document.addEventListener('DOMContentLoaded',() => {
