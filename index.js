@@ -1,4 +1,4 @@
-//import { parseResults, searchAll, searchMyRecipes, formatResults, renderResults, search, fetchJson, titleCase, toggleSave } from './utils.js';
+//import { parseResults, searchAll, searchMyRecipes, formatResults, renderResults, search, fetchJson, sentenceCase, toggleSave } from './utils.js';
 let searchArea = document.getElementById('search-wrapper')
 
 document.addEventListener('DOMContentLoaded',() => {
@@ -206,32 +206,39 @@ async function fetchJson(url){
 }
 
 /*
-
+Take in an array of recipe objects and display them in the results list if there are any
+If there are none, call renderNoResultState() to display a no-results state
 */
 function renderResults(recipeArray) {
     if(recipeArray.length >= 1){  
         document.getElementById('message-display').classList.add('hidden')
         let resultsHtml = ""
-        //recipeArray = selectArray(recipeArray)
         for ( let recipe of recipeArray ) {
             let imageLink = recipe.image
+            
+            //Format the array of ingredients as a comma separated string
             let ingredients = []
             recipe.ingredients.forEach(food => {
                 ingredients.push(food.text)
             })
+            let ingredientString = ingredients.join(", ")
+
             let interactionIcon
             let interactionText
             let interactionAlt
-            if (recipe.saved) {
-                interactionIcon = '/remove.svg'
-                interactionText = 'Remove'
-                interactionAlt = 'Remove icon for Remove from My Recipes button'
-            } else {
-                interactionIcon = '/add.svg'
-                interactionText = 'My Recipes'
-                interactionAlt = 'Add icon for Add to My Recipes button'
-            }
-            let ingredientString = ingredients.join(", ")
+
+            if (localStorage.getItem('myRecipesList')){
+                if (isAlreadySaved(recipe.uniqueUri, JSON.parse(localStorage.getItem('myRecipesList')))){
+                    interactionIcon = '/remove.svg'
+                    interactionText = 'Remove'
+                    interactionAlt = 'Remove icon for Remove from My Recipes button'                    
+                }
+             } else {
+                    interactionIcon = '/add.svg'
+                    interactionText = 'My Recipes'
+                    interactionAlt = 'Add icon for Add to My Recipes button'
+            }    
+
             resultsHtml += `
             <div class="result-item">
                 <img class="result-img" alt="recipe image for Tahini Shortbread Cookies" src="${imageLink}">
@@ -254,29 +261,30 @@ function renderResults(recipeArray) {
 }
 
 /*
-
+Take in a recipe object and return it with it's properties appropriately capitalized
 */
 function formatResults(recipeResults){
     recipeResults.forEach(recipe => {
-        recipe.name = titleCase(recipe.name)
-        recipe.source = titleCase(recipe.source)
-        recipe.mealType = recipe.mealType.map(type => titleCase(type))
-        recipe.cuisine = recipe.cuisine.map(cuisine => titleCase(cuisine))
-        recipe.dishType = recipe.dishType.map( item => titleCase(item))
+        recipe.name = sentenceCase(recipe.name)
+        recipe.source = sentenceCase(recipe.source)
+        recipe.mealType = recipe.mealType.map(type => sentenceCase(type))
+        recipe.cuisine = recipe.cuisine.map(cuisine => sentenceCase(cuisine))
+        recipe.dishType = recipe.dishType.map( item => sentenceCase(item))
         recipe.uniqueUri = formatUri(recipe.uniqueUri)
     })
     return recipeResults
 }
 
 /*
-
+Take in a string and return the same string where the first letter is capitalized
+Used to format recipe titles and other attributes with inconsistent formatting
 */
-function titleCase(string) {
+function sentenceCase(string) {
     return string.slice(0,1).toUpperCase() + string.slice(1)
 }
 
 /*
-
+Display a no-results message if a user's search returns no results
 */
 function renderNoResultState(){
     document.getElementById('results-list').innerHTML = ""
@@ -286,7 +294,9 @@ function renderNoResultState(){
 }
 
 /*
-
+Take in the uniqueUri and remove the characters after the final '/'
+Used to remove indication of which API call the URI was returned by, thus making the URI unique to the recipe
+and the same for all instances of that recipe
 */
 function formatUri(uniqueUri){
     let indices = []
