@@ -134,7 +134,7 @@ header h4 {
 }
 .result-item {
     border-bottom: 1px solid var(--dark-gray);
-    padding: 1em 1em 2em 1em;
+    padding: 1em;
     margin: 1em;
     height: min-content;
     display: grid;

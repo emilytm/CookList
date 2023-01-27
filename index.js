@@ -26,17 +26,6 @@ document.addEventListener('click',function(e) {
     }
 })
 
-
-
-
-
-
-//http://www.edamam.com/recipe/the-crispy-egg-db742742099859a8053b992dd3c1f452/crispy+egg
-
-//http://www.edamam.com/recipe/the-crispy-egg-db742742099859a8053b992dd3c1f452/egg"
-
-
-
 /*
 When on the Find Recipes page, when the user executes a search, get the results from the 
 API, format them, then render them on the page. Then save the results to the recipeResults
@@ -56,7 +45,7 @@ async function searchAll(searchTerm){
 }
 
 /*
-
+Take in a search term and search among the saved recipes for recipes whose names include the search term substring
 */
 function searchMyRecipes(searchTerm){
 
@@ -64,96 +53,89 @@ function searchMyRecipes(searchTerm){
         var recipesToSearch = JSON.parse(localStorage.getItem('myRecipesList'))
         if(recipesToSearch.length > 0){
             let searchResults = recipesToSearch.filter(recipe => recipe.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1)
-            renderResults(searchResults)
+            console.log(searchResults.length)
+            if (searchResults.length > 0){
+                renderResults(searchResults)
+            } else {
+                renderNoResultState()
+            }
         }
     }
 }
 
 /*
-
+Take in a uniqueUri and search within the saved recipes to see if it exists already in that list
 */
-function isAlreadySaved(uniqueUri,currentRecipesList){
+function isAlreadySaved(uniqueUri){
 
-    for (let i = 0; i < currentRecipesList.length; i++){
-        if(currentRecipesList[i].uniqueUri === uniqueUri){
+    let listToCheck = JSON.parse(localStorage.getItem('myRecipesList'))
+
+    for (let i = 0; i < listToCheck.length; i++){
+        if(listToCheck[i].uniqueUri === uniqueUri){
             return true
         } 
-        return false
     }
+    return false
 }
 
 /*
 
 */
 function addToList(recipeToToggle,currentRecipesList,imgToChange,pToChange){
-    console.log('adding to list')
 
     pToChange.textContent = 'Remove'
     imgToChange.setAttribute('src','/remove.svg')
 
-    currentRecipesList.push(recipeToToggle) 
+    currentRecipesList.unshift(recipeToToggle) 
     localStorage.setItem('myRecipesList',JSON.stringify(currentRecipesList))
-
-    console.log(`The item I just added to currentRecipesList (new length is ${currentRecipesList.length}) is: ${recipeToToggle.name}`)
-    console.log(`the ${currentRecipesList.length} items currently in currentRecipesList are: `)
-    currentRecipesList.forEach(recipe => console.log(recipe.name))
 }
 
 /*
-
+Take in a recipe object, the array you want to remove it from, and the elements that need to be updated
+when a recipe is removed, then update those elements, remove the object from the array, and render the
+new array. Store the new 
 */
 function removeFromList(recipeToToggle,currentRecipesList,imgToChange,pToChange){
-    console.log('removing from list')
 
     pToChange.textContent = 'My Recipes'
     imgToChange.setAttribute('src','/add.svg')
-
-    console.log(`the ${currentRecipesList.length} items currently in currentRecipesList are: `)
-    currentRecipesList.forEach(recipe => console.log(recipe.name))
-    
     currentRecipesList = currentRecipesList.filter(recipe => recipe.uniqueUri !== recipeToToggle.uniqueUri)
-    
-    console.log(`The item I just removed from currentRecipesList (new length is ${currentRecipesList.length}) is: ${recipeToToggle.name}`)
-    console.log(`the ${currentRecipesList.length} items currently in currentRecipesList are: `)
-    currentRecipesList.forEach(recipe => console.log(recipe.name))
-
+    if(window.location.href.indexOf('myrecipes') !== -1){
+        renderResults(currentRecipesList)
+    }
     localStorage.setItem('myRecipesList',JSON.stringify(currentRecipesList))
-
 }
 
 /*
-
+Take in the uniqueUri of a recipe object and either save or unsave it depending on whether it was previously saved
 */
 function toggleSave(uniqueUri){
-
-    if(localStorage.getItem('recipeResults')){
-        var currentResults = JSON.parse(localStorage.getItem('recipeResults'))
-        console.log(`currentResults is ${currentResults}`)
+    
+    //Figure out where to get the recipeToToggle object based on which list the user is viewing
+    var arrayToCheck
+    if(window.location.href.indexOf('myrecipes') !== -1){
+        arrayToCheck = JSON.parse(localStorage.getItem('myRecipesList'))
+    } else {
+        arrayToCheck = JSON.parse(localStorage.getItem('recipeResults'))
     }
 
+    //Get the recipe object that we want to save or unsave based on which recipe the user clicked
+    const recipeToToggle = arrayToCheck.find(recipe => recipe.uniqueUri === uniqueUri)
+
+    //Check whether the list exists in localStorage - if it does, proceed with adding or removing from it
+    //If it doesn't (see else statement), create the list with the recipeToToggle recipe object and save to localStorage
     if(localStorage.getItem('myRecipesList')){
-        var currentRecipesList = JSON.parse(localStorage.getItem('myRecipesList'))
-        if(currentRecipesList.length > 0){
-            console.log('at least 1 item in the list')
-        }
-    }
 
-    const recipeToToggle = currentResults.find(recipe => recipe.uniqueUri === uniqueUri)
-    console.log(recipeToToggle)
-
-    if(currentRecipesList){
-        console.log('currentRecipesList exists, so search through it')
-        console.log(`recipe uri I'm searching for is: ${uniqueUri}`)
         var imgToChange = document.querySelector(`img[data-recipe="${uniqueUri}"]`)
         var pToChange = document.querySelector(`p[data-recipe="${uniqueUri}"]`)
-        if(isAlreadySaved(uniqueUri,currentRecipesList)){
-            removeFromList(recipeToToggle,currentRecipesList,imgToChange,pToChange)
+        
+        //Check whether the recipe with the uniqueUri of the recipe the user clicked is already saved
+        //If it is then unsave it and if it isn't then save it
+        if(isAlreadySaved(uniqueUri)){
+            removeFromList(recipeToToggle,JSON.parse(localStorage.getItem('myRecipesList')),imgToChange,pToChange)
         } else {
-            addToList(recipeToToggle,currentRecipesList,imgToChange,pToChange)
+            addToList(recipeToToggle,JSON.parse(localStorage.getItem('myRecipesList')),imgToChange,pToChange)
         }
-        console.log('currentRecipesList contains: ')
-        console.log(JSON.parse(localStorage.getItem('currentRecipesList')))
-
     } else {
         let startList = [recipeToToggle]
         localStorage.setItem('myRecipesList',JSON.stringify(startList))
@@ -161,17 +143,21 @@ function toggleSave(uniqueUri){
 }
 
 /*
-
+Take in a searchTerm and search for matching recipes using the Edamam API, then return the resulting array
+of recipe objects (in edamam's formatting with extraneous info not needed here)
 */
 async function search(searchString){
+
     let getResults = await fetchJson(`https://api.edamam.com/api/recipes/v2?type=any&beta=true&q=${searchString}&app_id=08159f45&app_key=%207cde058d95c392d413b4017227de3d3a`)
     return getResults.hits
 }
 
 /*
-
+Take in the search term the user submitted then call search to get the array of matching recipes, 
+then create a new recipe object (app-specific formatting) exlcuding unnecessary info returned from API
 */
 async function parseResults(searchTerm){
+
     let searchString = searchTerm.replaceAll(' ','%20')
     let matchResults = await search(searchString)
     let rawResults = []
@@ -198,9 +184,10 @@ async function parseResults(searchTerm){
 }
 
 /*
-
+Take in a url and fetch then return the api response
 */
 async function fetchJson(url){
+
     let result = await fetch(url)
     return result.json()
 }
@@ -210,10 +197,15 @@ Take in an array of recipe objects and display them in the results list if there
 If there are none, call renderNoResultState() to display a no-results state
 */
 function renderResults(recipeArray) {
+    console.log('----------------------------------------------------------------')
+    let interactionIcon = '/add.svg'
+    let interactionText = 'My Recipes'
+    let interactionAlt = 'Add icon for Add to My Recipes button'
     if(recipeArray.length >= 1){  
         document.getElementById('message-display').classList.add('hidden')
         let resultsHtml = ""
         for ( let recipe of recipeArray ) {
+            console.log(`GOING TO RENDER RECIPE WITH NAME ${recipe.name} AND UNIQUEURI ${recipe.uniqueUri}`)
             let imageLink = recipe.image
             
             //Format the array of ingredients as a comma separated string
@@ -223,22 +215,18 @@ function renderResults(recipeArray) {
             })
             let ingredientString = ingredients.join(", ")
 
-            let interactionIcon
-            let interactionText
-            let interactionAlt
 
+            
             if (localStorage.getItem('myRecipesList')){
-                if (isAlreadySaved(recipe.uniqueUri, JSON.parse(localStorage.getItem('myRecipesList')))){
+                if (isAlreadySaved(recipe.uniqueUri)){
+                    console.log(`${recipe.name} is in the list already`)
                     interactionIcon = '/remove.svg'
                     interactionText = 'Remove'
                     interactionAlt = 'Remove icon for Remove from My Recipes button'                    
                 }
-             } else {
-                    interactionIcon = '/add.svg'
-                    interactionText = 'My Recipes'
-                    interactionAlt = 'Add icon for Add to My Recipes button'
-            }    
-
+            }
+            console.log(`for ${recipe.name} the interactions are: `)    
+            console.log(interactionIcon, interactionAlt, interactionText)
             resultsHtml += `
             <div class="result-item">
                 <img class="result-img" alt="recipe image for Tahini Shortbread Cookies" src="${imageLink}">
@@ -264,6 +252,7 @@ function renderResults(recipeArray) {
 Take in a recipe object and return it with it's properties appropriately capitalized
 */
 function formatResults(recipeResults){
+
     recipeResults.forEach(recipe => {
         recipe.name = sentenceCase(recipe.name)
         recipe.source = sentenceCase(recipe.source)
@@ -280,6 +269,7 @@ Take in a string and return the same string where the first letter is capitalize
 Used to format recipe titles and other attributes with inconsistent formatting
 */
 function sentenceCase(string) {
+
     return string.slice(0,1).toUpperCase() + string.slice(1)
 }
 
@@ -287,7 +277,9 @@ function sentenceCase(string) {
 Display a no-results message if a user's search returns no results
 */
 function renderNoResultState(){
+
     document.getElementById('results-list').innerHTML = ""
+    document.getElementById('message-display').classList.remove('hidden')
     document.getElementById('message-display').innerHTML = `
         <p class='empty-state-message'> Unable to find what you're looking for. Please try another search.</p>
     `
@@ -299,6 +291,7 @@ Used to remove indication of which API call the URI was returned by, thus making
 and the same for all instances of that recipe
 */
 function formatUri(uniqueUri){
+
     let indices = []
     for (let i = 0; i < uniqueUri.length; i++){
         if(uniqueUri[i] === "/"){
