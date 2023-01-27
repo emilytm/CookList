@@ -12,40 +12,6 @@ document.addEventListener('DOMContentLoaded',() => {
     }
 })
 
-
-
-
-    /*
-    console.log('In load event listener')
-    //If myRecipesList doesn't exist yet, create it and store it in localStorage
-
-    let currentList = localStorage.getItem('myRecipesList') ? localStorage.getItem('myRecipesList') : 0
-    let currentListLength = currentList ? currentList.length : 0
-    
-    console.log(`currentList of length ${currentListLength} is ${currentList}`)
-
-    JSON.parse(localStorage.getItem('myRecipesList')).length > 0 ? renderResults():0
-    
-    
-    
-        console.log('myRecipesList doesnt exist in localStorage yet')
-        let myRecipesList = [{name:'emily'}]
-        localStorage.setItem('myRecipesList',JSON.stringify(myRecipesList))
-    
-    console.log('it already exists in local storage')
-    let currentValue = JSON.parse(localStorage.getItem('myRecipesList'))
-    console.log(currentValue)
-    
-    if(window.location.href.indexOf('myrecipes') !== -1){
-        console.log('In load event listener on myRecipes page')
-        if(JSON.parse(localStorage.getItem('myRecipesList')).length > 0){
-            console.log('In load event listener on myRecipes page and the array isnt empty')
-            console.log(JSON.parse(localStorage.getItem('myRecipesList')))
-            renderResults(JSON.parse(localStorage.getItem('myRecipesList')))
-        }
-    }*/
-
-
 searchArea.addEventListener('submit', async function(e){
     e.preventDefault()
     let searchTerm = searchArea.elements[0].value
@@ -76,7 +42,8 @@ When on the Find Recipes page, when the user executes a search, get the results 
 API, format them, then render them on the page. Then save the results to the recipeResults
 localStorage item
 */
-export async function searchAll(searchTerm){
+async function searchAll(searchTerm){
+
     //set results to the unformatted array of recipe objects
     let results = await parseResults(searchTerm)
     //set recipeResults to a cleaned version of results
@@ -88,34 +55,23 @@ export async function searchAll(searchTerm){
 
 }
 
-export function searchMyRecipes(searchTerm){
-
-    let recipesToSearch = JSON.parse(localStorage.getItem('myRecipesList'))
-    console.log(recipesToSearch)
 /*
-    let recipeResults = JSON.parse(localStorage.getItem('recipeResults'))
-    let searchableList = JSON.parse(localStorage.getItem('myRecipesList'))
-    console.log(searchableList)
-    console.log(searchTerm)
-    if(searchTerm){
-        let lowerSearch = searchTerm.toLowerCase()
-        console.log(lowerSearch)
 
-        for (let i = 0; i < searchableList.length; i++){
-            if(searchableList[i].name.toLowerCase() === lowerSearch){
-                console.log(`${searchableList[i].name} matches search term ${lowerSearch}`)
-            }
+*/
+function searchMyRecipes(searchTerm){
+
+    if(localStorage.getItem('myRecipesList')){
+        var recipesToSearch = JSON.parse(localStorage.getItem('myRecipesList'))
+        if(recipesToSearch.length > 0){
+            let searchResults = recipesToSearch.filter(recipe => recipe.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1)
+            renderResults(searchResults)
         }
-
-        let recipeMatches = searchableList.filter(recipe => 
-            recipe.name.toLowerCase().indexOf(lowerSearch) !== -1)
-        console.log(recipeMatches)
-        //let filteredRecipes = recipeResults.filter(rec => (rec.saved === true && rec.name.indexOf(searchTerm) !== -1))
-        renderResults(recipeMatches)
-        console.log(`in searchMyRecipes the recipeResults after searching for ${searchTerm} is:`)
-        console.log(`${recipeMatches.map(x => x.name)}`)
-    }*/
+    }
 }
+
+/*
+
+*/
 function isAlreadySaved(uniqueUri,currentRecipesList){
 
     for (let i = 0; i < currentRecipesList.length; i++){
@@ -126,6 +82,9 @@ function isAlreadySaved(uniqueUri,currentRecipesList){
     }
 }
 
+/*
+
+*/
 function addToList(recipeToToggle,currentRecipesList,imgToChange,pToChange){
     console.log('adding to list')
 
@@ -140,6 +99,9 @@ function addToList(recipeToToggle,currentRecipesList,imgToChange,pToChange){
     currentRecipesList.forEach(recipe => console.log(recipe.name))
 }
 
+/*
+
+*/
 function removeFromList(recipeToToggle,currentRecipesList,imgToChange,pToChange){
     console.log('removing from list')
 
@@ -159,8 +121,10 @@ function removeFromList(recipeToToggle,currentRecipesList,imgToChange,pToChange)
 
 }
 
-export function toggleSave(uniqueUri){
-    //get current value of recipeResults from localStorage
+/*
+
+*/
+function toggleSave(uniqueUri){
 
     if(localStorage.getItem('recipeResults')){
         var currentResults = JSON.parse(localStorage.getItem('recipeResults'))
@@ -175,6 +139,7 @@ export function toggleSave(uniqueUri){
     }
 
     const recipeToToggle = currentResults.find(recipe => recipe.uniqueUri === uniqueUri)
+    console.log(recipeToToggle)
 
     if(currentRecipesList){
         console.log('currentRecipesList exists, so search through it')
@@ -189,129 +154,61 @@ export function toggleSave(uniqueUri){
         console.log('currentRecipesList contains: ')
         console.log(JSON.parse(localStorage.getItem('currentRecipesList')))
 
-        /*for (let i = 0; i < currentRecipesList.length; i++){
-            console.log(`I'm comparing ${currentRecipesList[i].uniqueUri} to ${uniqueUri} and whether they match is: `)
-            if(currentRecipesList[i].uniqueUri === uniqueUri){
-                console.log(`recipe is already in list so remove it`)
-            } else {
-                console.log('recipe is not already in list so add it')
-            }
-        }/*
-        if(currentRecipesList.indexOf.call(recipeToToggle.uniqueUri) !== -1){
-            console.log('recipe is found in list so remove it')
-        } else {
-            console.log('recipe is not found in list so add it')
-        }*/
     } else {
-        console.log('currentRecipesList doesnt exist, so create it')
+        let startList = [recipeToToggle]
+        localStorage.setItem('myRecipesList',JSON.stringify(startList))
     }
-    /*
-    if(JSON.parse(localStorage.getItem('myRecipesList')).length > 0){
-        console.log(JSON.parselocalStorage.hasOwnProperty('myRecipesList'))
-        let currentRecipesList = JSON.parse(localStorage.getItem('myRecipesList'))
-    } else {
-        let currentRecipesList = []
-    }
-    console.log(`currentRecipesList is ${currentRecipesList}`)
-    //find the recipe that the user clicked in the list of results
-    const recipeToToggle = currentResults.find(recipe => recipe.uniqueUri === uniqueUri)
-    console.log(`recipeToToggle is ${recipeToToggle.name}`)
-
-    //If it is already in myRecipesList, change the button to the 'add' version and remove it from myRecipesList
-    if(currentRecipesList.indexOf(recipeToToggle.uniqueUri) !== -1){
-        console.log(`it is already in myRecipesList because the index of the recipe is ${currentRecipesList.indexOf(recipeToToggle.uniqueUri)}`)
-        let pToChange = document.querySelector(`p[data-recipe="${uniqueUri}"]`)
-        let imgToChange = document.querySelector(`img[data-recipe="${uniqueUri}"]`)
-        pToChange.textContent = 'My Recipes'
-        imgToChange.setAttribute('src','/add.svg')
-        currentRecipesList = currentRecipesList.filter(recipe => recipe.uniqueUri !== recipeToToggle.uniqueUri)
-        localStorage.setItem('myRecipesList',JSON.stringify(currentRecipesList))
-
-//If it is NOT already in myRecipesList, change the button to the 'remove' version and add it to myRecipesList
-    } else {
-        console.log(`it is not already in myRecipesList because the index of the recipe is ${currentRecipesList.indexOf(recipeToToggle.uniqueUri)}`)
-        let pToChange = document.querySelector(`p[data-recipe="${uniqueUri}"]`)
-        let imgToChange = document.querySelector(`img[data-recipe="${uniqueUri}"]`)
-        pToChange.textContent = 'Remove'
-        imgToChange.setAttribute('src','/remove.svg')
-        currentRecipesList.push(recipeToToggle) 
-        console.log('it wasnt in the list so I added it and now currentRecipesList is:')
-        console.log(currentRecipesList)
-        localStorage.setItem('myRecipesList',JSON.stringify(currentRecipesList))
-
-        console.log(JSON.parse(localStorage.getItem('myRecipesList')))
-    }
-
-/*
-    //If there is no recipe with a URI that matches the one that was clicked, return early
-    
-    
-    const index = currentResults.indexOf(recipeToToggle)
-
-    if(currentResults[index].saved){
-        let pToChange = document.querySelector(`p[data-recipe="${currentResults[index].uniqueUri}"]`)
-        let imgToChange = document.querySelector(`img[data-recipe="${currentResults[index].uniqueUri}"]`)
-        pToChange.textContent = 'My Recipes'
-        imgToChange.setAttribute('src','/add.svg')
-    } else if (!currentResults[index].saved){
-        let pToChange = document.querySelector(`p[data-recipe="${currentResults[index].uniqueUri}"]`)
-        let imgToChange = document.querySelector(`img[data-recipe="${currentResults[index].uniqueUri}"]`)
-        pToChange.textContent = 'Remove'
-        imgToChange.setAttribute('src','/remove.svg') 
-    }
-    currentResults[index].saved = !currentResults[index].saved
-    localStorage.setItem('recipeResults',JSON.stringify(recipeResults))
-    console.log(`in toggleSave the recipeResults after toggling save for ${recipeToToggle.name} is:`)
-    console.log(`${JSON.parse(localStorage.getItem('recipeResults'))}`)
-*/
 }
 
-export async function search(searchString){
+/*
+
+*/
+async function search(searchString){
     let getResults = await fetchJson(`https://api.edamam.com/api/recipes/v2?type=any&beta=true&q=${searchString}&app_id=08159f45&app_key=%207cde058d95c392d413b4017227de3d3a`)
     return getResults.hits
 }
 
-export async function parseResults(searchTerm){
+/*
+
+*/
+async function parseResults(searchTerm){
     let searchString = searchTerm.replaceAll(' ','%20')
     let matchResults = await search(searchString)
     let rawResults = []
     for (let hit of matchResults){
         rawResults.push({
-            name: hit.recipe.label,
-            link: hit.recipe.url,
-            source: hit.recipe.source,
-            mealType: hit.recipe.mealType,
-            ingredients: hit.recipe.ingredients,
-            cuisine: hit.recipe.cuisineType,
-            dishType: hit.recipe.dishType,
-            healthLabels: hit.recipe.healthLabels,
-            image: hit.recipe.image,
-            images: hit.recipe.images,
-            yield: hit.recipe.yield,
-            time: hit.recipe.totalTime,
-            cautions: hit.recipe.cautions,
-            uniqueUri: hit.recipe.shareAs,
+            name: hit.recipe?.label,
+            link: hit.recipe?.url,
+            source: hit.recipe?.source,
+            mealType: hit.recipe?.mealType,
+            ingredients: hit.recipe?.ingredients,
+            cuisine: hit.recipe?.cuisineType,
+            dishType: hit.recipe?.dishType,
+            healthLabels: hit.recipe?.healthLabels,
+            image: hit.recipe?.image,
+            images: hit.recipe?.images,
+            yield: hit.recipe?.yield,
+            time: hit.recipe?.totalTime,
+            cautions: hit.recipe?.cautions,
+            uniqueUri: hit.recipe?.shareAs,
             saved: false
         })
     }
     return rawResults
 }
 
-export async function fetchJson(url){
+/*
+
+*/
+async function fetchJson(url){
     let result = await fetch(url)
     return result.json()
 }
-/*
-export function selectArray(recipeList) {
-    if(window.location.href.indexOf('myrecipes') > -1) {
-        return recipeList.filter(x => x.saved)
-    } else {
-        return recipeList
-    }
-}
-*/
 
-export function renderResults(recipeArray) {
+/*
+
+*/
+function renderResults(recipeArray) {
     if(recipeArray.length >= 1){  
         document.getElementById('message-display').classList.add('hidden')
         let resultsHtml = ""
@@ -356,7 +253,10 @@ export function renderResults(recipeArray) {
     }
 }
 
-export function formatResults(recipeResults){
+/*
+
+*/
+function formatResults(recipeResults){
     recipeResults.forEach(recipe => {
         recipe.name = titleCase(recipe.name)
         recipe.source = titleCase(recipe.source)
@@ -368,18 +268,27 @@ export function formatResults(recipeResults){
     return recipeResults
 }
 
-export function titleCase(string) {
+/*
+
+*/
+function titleCase(string) {
     return string.slice(0,1).toUpperCase() + string.slice(1)
 }
 
-export function renderNoResultState(){
+/*
+
+*/
+function renderNoResultState(){
     document.getElementById('results-list').innerHTML = ""
     document.getElementById('message-display').innerHTML = `
         <p class='empty-state-message'> Unable to find what you're looking for. Please try another search.</p>
     `
 }
 
-export function formatUri(uniqueUri){
+/*
+
+*/
+function formatUri(uniqueUri){
     let indices = []
     for (let i = 0; i < uniqueUri.length; i++){
         if(uniqueUri[i] === "/"){
