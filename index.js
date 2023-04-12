@@ -5,8 +5,6 @@ document.addEventListener('DOMContentLoaded',() => {
     if(window.location.href.indexOf('myrecipes') !== -1){
         if (localStorage.getItem('myRecipesList')){
             renderResults(JSON.parse(localStorage.getItem('myRecipesList')))
-        } else {
-            console.log('list is empty')
         }
     }
 })
@@ -197,14 +195,13 @@ If there are none, call renderNoResultState() to display a no-results state
 */
 function renderResults(recipeArray) {
     console.log('----------------------------------------------------------------')
-    let interactionIcon = '/add.svg'
-    let interactionText = 'My Recipes'
-    let interactionAlt = 'Add icon for Add to My Recipes button'
     if(recipeArray.length >= 1){  
         document.getElementById('message-display').classList.add('hidden')
         let resultsHtml = ""
         for ( let recipe of recipeArray ) {
-            console.log(`GOING TO RENDER RECIPE WITH NAME ${recipe.name} AND UNIQUEURI ${recipe.uniqueUri}`)
+            let interactionIcon = '/add.svg'
+            let interactionText = 'My Recipes'
+            let interactionAlt = 'Add icon for Add to My Recipes button'
             let imageLink = recipe.image
             
             //Format the array of ingredients as a comma separated string
@@ -214,18 +211,14 @@ function renderResults(recipeArray) {
             })
             let ingredientString = ingredients.join(", ")
 
-
-            
             if (localStorage.getItem('myRecipesList')){
                 if (isAlreadySaved(recipe.uniqueUri)){
-                    console.log(`${recipe.name} is in the list already`)
                     interactionIcon = '/remove.svg'
                     interactionText = 'Remove'
                     interactionAlt = 'Remove icon for Remove from My Recipes button'                    
                 }
             }
-            console.log(`for ${recipe.name} the interactions are: `)    
-            console.log(interactionIcon, interactionAlt, interactionText)
+
             resultsHtml += `
             <div class="result-item">
                 <img class="result-img" alt="recipe image for Tahini Shortbread Cookies" src="${imageLink}">
