@@ -13,7 +13,7 @@
 body, .app-area {
     padding: 0;
     margin: 0;
-    background-color: var(--black);
+    background-color: var(--light-gray);
     color: var(--blue);
     font-family: 'Inter',Arial, Helvetica, sans-serif;
 }
@@ -21,7 +21,7 @@ body, .app-area {
 .app-area {
     max-width: 700px;
     margin: 2em auto 0 auto;
-    border: 2px solid var(--blue);
+    border: 1px solid var(--light-gray);
     border-radius: .25em;
 }
 
@@ -31,7 +31,7 @@ body, .app-area {
 
 header {
     background-image: 
-        linear-gradient(357deg, rgba(15,13,52,0.8281906512605042) 0%, rgba(8,8,98,0.7189469537815126) 44%, rgba(10, 10, 87, 0.224) 100%),
+        linear-gradient(357deg, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0.719) 44%, rgba(0, 0, 0, 0.224) 100%),
         url('hero-bg.jpg');
     background-size: cover;
     background-position: bottom center;

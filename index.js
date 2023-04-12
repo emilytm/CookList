@@ -227,7 +227,7 @@ function renderResults(recipeArray) {
                     <img class='list-toggle-icon' id='list-toggle-icon' src="${interactionIcon}" alt="${interactionAlt}" data-recipe="${recipe.uniqueUri}">
                     <p class="list-toggle-text" id="list-toggle-text" data-recipe="${recipe.uniqueUri}">${interactionText}</p>
                 </div>
-                <p class="source left-align"><a href="${recipe.link}">${recipe.source}</a></p>
+                <p class="source left-align"><a href="${recipe.link}" target="_blank">${recipe.source}</a></p>
                 <p class="tags left-align">${recipe.mealType}, ${recipe.dishType}</p>
                 <p class="cuisine">${recipe.cuisine}</p>
                 <p class="ingredient-preview left-align end-in-ellipse">${ingredientString}</p>
