@@ -1,6 +1,8 @@
 # CookList
 
-This app started as part of the 'Working with APIs' module in Scrimba's Front-end Developer Career Path. We were tasked with building a responsive web app that made use of a REST API and I decided to build an app for keeping track of recipes. I plan to turn this into a functional app for my own use and to share with friends at some point in the future, and to incorporate the related work I did in RecipeFinder to make it a more complete tool.
+Cook List is a recipe search and saving app that I created as the solo project for the 'Working with APIs' module of the Scrimba Front End Developer Career Path. We were tasked with building a movie watchlist app and I used Edamam's Recipe Search API to make it something I would be likely to use myself and keep improving on. This was my first self-directed API project (rather than following a spec).
+
+**Next steps:** Store saved recipes in a more robust way, integrate the search and save functionality with the RecipeFinder project, allow for more categorization, tagging, and note taking on individual recipes.
 
 See this project live [here](https://tiny-mooncake-adfe20.netlify.app/).
 
